@@ -20,7 +20,7 @@ const RowModal = ({addDeviceToCart, cart, device, removeDeviceFromCart}) => {
         <div>{quantity}</div>
         <div>this items in cart: {counter}</div>
         <div onClick={() => addDeviceToCart(device)}>add</div>
-        <div onClick={() => removeDeviceFromCart(device)}>remove</div>
+        <div onClick={() => removeDeviceFromCart(id)}>remove</div>
       </div>
     )
   )

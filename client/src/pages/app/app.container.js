@@ -17,7 +17,7 @@ const mapDispatchToProps = dispatch => ({
   getCart: () => dispatch(getCartRequest()),
   getDevices: () => dispatch(getDevicesRequest()),
   openModal: () => dispatch(openModal()),
-  removeDeviceFromCart: (device) => dispatch(removeDeviceFromCartRequest(device)),
+  removeDeviceFromCart: (deviceId) => dispatch(removeDeviceFromCartRequest(deviceId)),
   setModalId: (modalId) => dispatch(setModalId(modalId))
 });
 
