@@ -1,11 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
 
 import Header from '../../components/header.component';
 import InfoModal from '../../components/info-modal.component';
 import List from '../../components/list.component';
 import Modal from '../../components/modal.component';
 import RowModal from '../../components/row-modal.component';
+
+const useStyles = makeStyles((theme) => ({
+  main: {
+    flexGrow: 1,
+    padding: theme.spacing(2),
+  },
+  row: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  },
+}));
 
 const App = ({
                addDeviceToCart,
@@ -19,6 +34,8 @@ const App = ({
                removeDeviceFromCart,
                setModalId
              }) => {
+  const classes = useStyles();
+
   const [modalComponent, setModalComponent] = useState(null);
   const [currentDevice, setCurrentDevice] = useState(null);
 
@@ -40,7 +57,7 @@ const App = ({
         );
         break;
       case 'info':
-        setModalComponent(<InfoModal title={'Someone changed data'} message={'Device quantity decreased by 1'}/>);
+        setModalComponent(<InfoModal title={'Someone changed the data'} message={'Device quantity decreased by 1'}/>);
         break;
       default:
         setModalComponent(null);
@@ -55,18 +72,21 @@ const App = ({
   };
 
   return (
-    <main>
-      <Header cart={cart}/>
-      <List
-        devices={devices}
-        onDeviceClick={onDeviceClick}
-      />
-      <Modal
-        component={modalComponent}
-        modal={modal}
-        closeModal={closeModal}
-      />
-    </main>
+    <Container className={classes.main} maxWidth="sm">
+      <Grid container spacing={3}>
+        <Header cart={cart}/>
+        <List
+          className={classes.row}
+          devices={devices}
+          onDeviceClick={onDeviceClick}
+        />
+        <Modal
+          component={modalComponent}
+          modal={modal}
+          closeModal={closeModal}
+        />
+      </Grid>
+    </Container>
   );
 };
 
