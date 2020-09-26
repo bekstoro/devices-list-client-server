@@ -1,10 +1,12 @@
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
+const io = require('socket.io')();
 
 const devices = require('./devices');
 
 const app = express();
+const ioPort = 8000;
 const port = 8080;
 
 app.use(bodyParser.urlencoded({extended: false}));
@@ -26,5 +28,29 @@ app.delete('/cart/:deviceId', (req, res) => res.json({cart: devices.removeFromCa
 app.get('/devices', (req, res) => res.json({devices: devices.getDevices()}));
 
 app.listen(port, () => {
-  console.log('Server running on port 8080');
+  console.log('Server is running on port 8080');
 });
+
+
+
+let interval;
+let updateTime = devices.getUpdateTime();
+
+io.on('connection', (socket) => {
+  console.log('New client connected');
+  if (interval) {
+    clearInterval(interval);
+  }
+  interval = setInterval(() => {
+    if (updateTime !== devices.getUpdateTime()) {
+      updateTime = devices.getUpdateTime();
+      socket.broadcast.emit('deviceUpdate', devices.getUpdateDevice());
+    }
+  }, 1000);
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+    clearInterval(interval);
+  });
+});
+io.listen(ioPort);
+console.log('SocketIO is running on port 8000');

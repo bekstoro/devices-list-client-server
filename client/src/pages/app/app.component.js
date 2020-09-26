@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import socketIOClient from 'socket.io-client';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -9,6 +10,8 @@ import InfoModal from '../../components/info-modal.component';
 import List from '../../components/list.component';
 import Modal from '../../components/modal.component';
 import RowModal from '../../components/row-modal.component';
+
+const socketUrl = 'http://localhost:8000';
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -73,13 +76,28 @@ const App = ({
         );
         break;
       case 'info':
-        setModalComponent(<InfoModal title={'Someone changed the data'} message={'Device quantity decreased by 1'}/>);
+        setModalComponent(
+          <InfoModal
+            title={'Someone changed the data'}
+            message={`${(currentDevice && currentDevice.name) || 'Some device'} quantity decreased by 1`}
+          />
+        );
         break;
       default:
         setModalComponent(null);
         break;
     }
   }, [cart, currentDevice, modal, setModalComponent]);
+
+  useEffect(() => {
+    const socket = socketIOClient(socketUrl);
+    socket.on("deviceUpdate", device => {
+      setCurrentDevice(device);
+      setModalId('info');
+      openModal();
+    });
+    return () => socket.disconnect();
+  }, []);
 
   return (
     <Container className={classes.main} maxWidth="sm">

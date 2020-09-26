@@ -2,6 +2,8 @@ const {initialCart, initialDevices} = require('./constants');
 
 class Devices {
   constructor(cart, devices) {
+    this.updateDevice = null;
+    this.updateTime = new Date();
     this.cart = cart;
     this.devices = devices;
   }
@@ -25,6 +27,9 @@ class Devices {
         ...device,
         quantity: device.quantity - 1
       } : device);
+
+      this.updateDevice = availableDevice;
+      this.updateTime = new Date();
     }
     return this.cart;
   }
@@ -35,6 +40,14 @@ class Devices {
 
   getDevices() {
     return this.devices;
+  }
+
+  getUpdateDevice() {
+    return this.updateDevice;
+  }
+
+  getUpdateTime() {
+    return this.updateTime;
   }
 
   removeFromCart(deviceId) {
