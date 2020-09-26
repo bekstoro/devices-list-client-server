@@ -39,10 +39,26 @@ const App = ({
   const [modalComponent, setModalComponent] = useState(null);
   const [currentDevice, setCurrentDevice] = useState(null);
 
+  const onDeviceClick = device => () => {
+    setCurrentDevice(device);
+    setModalId('row');
+    openModal();
+  };
+
+  const onAddClick = (device) => {
+    addDeviceToCart(device);
+    closeModal();
+  };
+
+  const onRemoveClick = (deviceId) => {
+    removeDeviceFromCart(deviceId);
+    closeModal();
+  };
+
   useEffect(() => {
     getCart();
     getDevices();
-  }, [getCart, getDevices]);
+  }, [getCart, getDevices, modal.isOpen]);
 
   useEffect(() => {
     switch (modal.modalId) {
@@ -51,8 +67,8 @@ const App = ({
           <RowModal
             cart={cart}
             device={currentDevice}
-            addDeviceToCart={addDeviceToCart}
-            removeDeviceFromCart={removeDeviceFromCart}
+            addDeviceToCart={onAddClick}
+            removeDeviceFromCart={onRemoveClick}
           />
         );
         break;
@@ -63,13 +79,7 @@ const App = ({
         setModalComponent(null);
         break;
     }
-  }, [addDeviceToCart, cart, currentDevice, modal, removeDeviceFromCart, setModalComponent]);
-
-  const onDeviceClick = device => () => {
-    setCurrentDevice(device);
-    setModalId('row');
-    openModal();
-  };
+  }, [cart, currentDevice, modal, setModalComponent]);
 
   return (
     <Container className={classes.main} maxWidth="sm">

@@ -27,7 +27,7 @@ const RowModal = ({addDeviceToCart, cart, device, removeDeviceFromCart}) => {
   const [counter, setCounter] = useState(0);
 
   useEffect(() => {
-    const currentDeviceInCart = cart.find(cartDevice => cartDevice.id === cart.id);
+    const currentDeviceInCart = cart.find(cartDevice => cartDevice.id === device.id);
     setCounter((currentDeviceInCart && currentDeviceInCart.quantity) || 0);
   }, [cart, device]);
 
