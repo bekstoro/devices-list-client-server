@@ -1,0 +1,14 @@
+version: "3"
+services:
+  server:
+    build: ./server
+    ports:
+      - "8000:8000"
+    container_name: docker-list-server
+  client:
+    build: ./client
+    ports:
+      - "80:80"
+    container_name: docker-list-client
+    depends_on:
+      - server
